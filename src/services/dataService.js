@@ -1,39 +1,32 @@
-import { mockDevices, getDeviceById } from '../mock/mockDevices';
-import { mockLabs }   from '../mock/mockLabs';
-import { mockAlerts } from '../mock/mockAlerts';
-import { mockHistory } from '../mock/mockHistory';
-import { mockUsers }  from '../mock/mockUsers';
-import { mockReports } from '../mock/mockReports';
-
 /**
- * Data abstraction layer.
- * Phase 2: replace each function body with an API/Firestore call.
- * Components consume this layer via hooks — no changes needed in components.
+ * Data service layer.
+ * All dummy/mock PC monitoring data has been removed.
+ * Devices are managed directly via deviceService and Firestore.
  */
 
 export const dataService = {
   // Devices
-  getDevices:      ()       => Promise.resolve([...mockDevices]),
-  getDeviceById:   (id)     => Promise.resolve(getDeviceById(id)),
-  addDevice:       (device) => Promise.resolve({ ...device, id: `pc-${Date.now()}`, addedAt: new Date().toISOString() }),
-  updateDevice:    (id, data) => Promise.resolve({ ...getDeviceById(id), ...data }),
-  deleteDevice:    (id)     => Promise.resolve(id),
+  getDevices: () => Promise.resolve([]),
+  getDeviceById: () => Promise.resolve(null),
+  addDevice: (d) => Promise.resolve(d),
+  updateDevice: (id, data) => Promise.resolve({ id, ...data }),
+  deleteDevice: (id) => Promise.resolve(id),
 
   // Labs
-  getLabs:         ()       => Promise.resolve([...mockLabs]),
-  getLabById:      (id)     => Promise.resolve(mockLabs.find((l) => l.id === id) ?? null),
+  getLabs: () => Promise.resolve([]),
+  getLabById: () => Promise.resolve(null),
 
   // Alerts
-  getAlerts:       ()       => Promise.resolve([...mockAlerts]),
-  getAlertsByDevice:(id)    => Promise.resolve(mockAlerts.filter((a) => a.device.toLowerCase() === id.toLowerCase())),
+  getAlerts: () => Promise.resolve([]),
+  getAlertsByDevice: () => Promise.resolve([]),
 
   // History
-  getHistory:      ()       => Promise.resolve([...mockHistory]),
-  getHistoryByDevice:(id)   => Promise.resolve(mockHistory.filter((h) => h.deviceId === id)),
+  getHistory: () => Promise.resolve([]),
+  getHistoryByDevice: () => Promise.resolve([]),
 
   // Users
-  getUsers:        ()       => Promise.resolve([...mockUsers]),
+  getUsers: () => Promise.resolve([]),
 
   // Reports
-  getReports:      ()       => Promise.resolve({ ...mockReports }),
+  getReports: () => Promise.resolve(null),
 };

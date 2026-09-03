@@ -1,28 +1,77 @@
-import { useState, useEffect } from 'react';
-import { dataService } from '../services/dataService';
+import { useState, useEffect, useCallback } from 'react';
+import {
+  subscribeToDevices,
+  resolveDeviceStatus,
+} from '../services/deviceService';
+import { doc, deleteDoc, updateDoc } from 'firebase/firestore';
+import { db } from '../firebase/config';
 
 export const useDevices = () => {
-  const [devices, setDevices] = useState([]);
+  const [rawDevices, setRawDevices] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error,   setError]   = useState(null);
+  const [error, setError] = useState(null);
+  const [, setTick] = useState(0);
 
-  const fetch = async () => {
-    try {
-      setLoading(true);
-      const data = await dataService.getDevices();
-      setDevices(data);
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
-    }
+  // Subscribe to real-time Firestore device updates
+  useEffect(() => {
+    setLoading(true);
+    const unsubscribe = subscribeToDevices(
+      (list) => {
+        setRawDevices(list);
+        setLoading(false);
+        setError(null);
+      },
+      (err) => {
+        setError(err.message);
+        setLoading(false);
+      }
+    );
+
+    return () => unsubscribe();
+  }, []);
+
+  // Requirement 9: Lightweight local timer every 5 seconds
+  // Recalculates online/offline from lastSeen locally without writing to Firestore.
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTick((t) => t + 1);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Compute effective online/offline status based on 60s lastSeen threshold
+  const devices = rawDevices.map((d) => ({
+    ...d,
+    status: resolveDeviceStatus(d),
+  }));
+
+  const refetch = useCallback(() => {
+    // onSnapshot is already continuous and real-time; trigger state refresh
+    setTick((t) => t + 1);
+  }, []);
+
+  const addDevice = async () => {
+    // Real browser devices auto-register upon login.
+    throw new Error('Devices are automatically registered when users log in from their browser.');
   };
 
-  useEffect(() => { fetch(); }, []);
+  const updateDevice = async (id, data) => {
+    const deviceRef = doc(db, 'devices', id);
+    await updateDoc(deviceRef, data);
+  };
 
-  const addDevice    = async (d)       => { const nd = await dataService.addDevice(d);        setDevices((p) => [...p, nd]); return nd; };
-  const updateDevice = async (id, d)   => { const ud = await dataService.updateDevice(id, d); setDevices((p) => p.map((x) => x.id === id ? ud : x)); return ud; };
-  const deleteDevice = async (id)      => { await dataService.deleteDevice(id);               setDevices((p) => p.filter((x) => x.id !== id)); };
+  const deleteDevice = async (id) => {
+    const deviceRef = doc(db, 'devices', id);
+    await deleteDoc(deviceRef);
+  };
 
-  return { devices, loading, error, refetch: fetch, addDevice, updateDevice, deleteDevice };
+  return {
+    devices,
+    loading,
+    error,
+    refetch,
+    addDevice,
+    updateDevice,
+    deleteDevice,
+  };
 };

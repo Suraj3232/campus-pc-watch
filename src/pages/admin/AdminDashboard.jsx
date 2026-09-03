@@ -13,6 +13,7 @@ import { useAlerts }  from '../../hooks/useAlerts';
 import { useHistory } from '../../hooks/useHistory';
 import { timeAgo }    from '../../utils/formatters';
 import { getSeverityColor, getSeverityBg } from '../../utils/statusUtils';
+import { getMillis } from '../../services/deviceService';
 
 const AdminDashboard = () => {
   const { devices, loading: dLoad, error: dErr } = useDevices();
@@ -31,7 +32,7 @@ const AdminDashboard = () => {
   const activeAlerts = alerts.filter((a) => !a.resolved);
   const recentAlerts = activeAlerts.slice(0, 5);
   const recentActivity = history.slice(0, 10);
-  const recentDevices  = [...devices].sort((a,b) => new Date(b.lastSeen) - new Date(a.lastSeen)).slice(0, 8);
+  const recentDevices  = [...devices].sort((a, b) => getMillis(b.lastSeen) - getMillis(a.lastSeen)).slice(0, 8);
 
   return (
     <AppShell title="Dashboard">
@@ -70,15 +71,31 @@ const AdminDashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {recentDevices.map((d) => (
-                    <tr key={d.id}>
-                      <td><Link to={`/admin/devices/${d.id}`} style={{ fontFamily: 'var(--font-mono)', fontWeight: 600, color: 'var(--color-accent)' }}>{d.name}</Link></td>
-                      <td style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-xs)' }}>{d.ip}</td>
-                      <td style={{ fontSize: 'var(--text-sm)' }}>{d.lab}</td>
-                      <td><StatusBadge status={d.status} /></td>
-                      <td style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)' }}>{timeAgo(d.lastSeen)}</td>
+                  {recentDevices.length === 0 ? (
+                    <tr>
+                      <td colSpan="5" style={{ textAlign: 'center', padding: 'var(--space-6)', color: 'var(--color-text-muted)', fontSize: 'var(--text-sm)' }}>
+                        No devices connected yet.
+                      </td>
                     </tr>
-                  ))}
+                  ) : (
+                    recentDevices.map((d) => (
+                      <tr key={d.id}>
+                        <td>
+                          <Link to={`/admin/devices/${d.id}`} style={{ fontFamily: 'var(--font-mono)', fontWeight: 600, color: 'var(--color-accent)' }}>
+                            {d.name}
+                          </Link>
+                        </td>
+                        <td style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-xs)' }}>
+                          {d.ip || 'Not available'}
+                        </td>
+                        <td style={{ fontSize: 'var(--text-sm)' }}>
+                          {d.lab || 'Not Assigned'}
+                        </td>
+                        <td><StatusBadge status={d.status} /></td>
+                        <td style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)' }}>{timeAgo(d.lastSeen)}</td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
@@ -94,20 +111,26 @@ const AdminDashboard = () => {
               <Link to="/admin/labs" className="btn btn-ghost btn-sm">View all <ArrowRight size={13} /></Link>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
-              {labs.map((lab) => {
-                const pct = Math.round((lab.online / lab.totalPCs) * 100);
-                return (
-                  <div key={lab.id}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-1)' }}>
-                      <span style={{ fontSize: 'var(--text-sm)', fontWeight: 500 }}>{lab.name}</span>
-                      <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)' }}>{lab.online}/{lab.totalPCs} online ({pct}%)</span>
+              {labs.length === 0 ? (
+                <p style={{ textAlign: 'center', padding: 'var(--space-4)', color: 'var(--color-text-muted)', fontSize: 'var(--text-sm)' }}>
+                  No labs configured yet.
+                </p>
+              ) : (
+                labs.map((lab) => {
+                  const pct = lab.totalPCs > 0 ? Math.round((lab.online / lab.totalPCs) * 100) : 0;
+                  return (
+                    <div key={lab.id}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-1)' }}>
+                        <span style={{ fontSize: 'var(--text-sm)', fontWeight: 500 }}>{lab.name}</span>
+                        <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)' }}>{lab.online}/{lab.totalPCs} online ({pct}%)</span>
+                      </div>
+                      <div className="progress-bar">
+                        <div className="progress-bar-fill online" style={{ width: `${pct}%` }} />
+                      </div>
                     </div>
-                    <div className="progress-bar">
-                      <div className="progress-bar-fill online" style={{ width: `${pct}%` }} />
-                    </div>
-                  </div>
-                );
-              })}
+                  );
+                })
+              )}
             </div>
           </div>
         </div>
@@ -148,17 +171,23 @@ const AdminDashboard = () => {
               <Link to="/admin/history" className="btn btn-ghost btn-sm">All <ArrowRight size={13} /></Link>
             </div>
             <div style={{ padding: 'var(--space-4) var(--space-5)' }}>
-              <div className="timeline">
-                {recentActivity.map((h) => (
-                  <div key={h.id} className="timeline-item">
-                    <span className={`timeline-dot ${h.status}`} />
-                    <div className="timeline-time">{timeAgo(h.timestamp)}</div>
-                    <div className="timeline-content">
-                      <strong style={{ color: 'var(--color-text-primary)' }}>{h.device}</strong> — {h.message}
+              {recentActivity.length === 0 ? (
+                <p style={{ textAlign: 'center', padding: 'var(--space-4)', color: 'var(--color-text-muted)', fontSize: 'var(--text-sm)' }}>
+                  No recent activity.
+                </p>
+              ) : (
+                <div className="timeline">
+                  {recentActivity.map((h) => (
+                    <div key={h.id} className="timeline-item">
+                      <span className={`timeline-dot ${h.status}`} />
+                      <div className="timeline-time">{timeAgo(h.timestamp)}</div>
+                      <div className="timeline-content">
+                        <strong style={{ color: 'var(--color-text-primary)' }}>{h.device}</strong> — {h.message}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>

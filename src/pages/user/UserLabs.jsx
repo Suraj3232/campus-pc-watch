@@ -4,6 +4,7 @@ import AppShell     from '../../components/layout/AppShell';
 import PageHeader   from '../../components/layout/PageHeader';
 import LoadingState from '../../components/ui/LoadingState';
 import ErrorState   from '../../components/ui/ErrorState';
+import EmptyState   from '../../components/ui/EmptyState';
 import { useLabs }  from '../../hooks/useLabs';
 import { getHealthLabel } from '../../utils/statusUtils';
 
@@ -15,7 +16,10 @@ const UserLabs = () => {
   return (
     <AppShell title="Labs">
       <PageHeader title="Lab Overview" subtitle="Read-only view" breadcrumbs={['User', 'Labs']} />
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 'var(--space-5)' }}>
+      {labs.length === 0 ? (
+        <EmptyState title="No labs configured" message="No campus computer labs have been configured yet." />
+      ) : (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 'var(--space-5)' }}>
         {labs.map((lab) => {
           const pct    = Math.round((lab.online / lab.totalPCs) * 100);
           const health = getHealthLabel(pct);
@@ -46,6 +50,7 @@ const UserLabs = () => {
           );
         })}
       </div>
+      )}
     </AppShell>
   );
 };

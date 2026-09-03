@@ -57,7 +57,7 @@ const AdminHistory = () => {
       </div>
 
       {filtered.length === 0 ? (
-        <EmptyState title="No history found" message="Try adjusting your filters." />
+        <EmptyState title="No device history available yet" message="Device connection and disconnection events will be recorded here." />
       ) : (
         <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
           <div className="table-container">

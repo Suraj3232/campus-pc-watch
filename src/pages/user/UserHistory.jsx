@@ -20,8 +20,8 @@ const UserHistory = () => {
 
   return (
     <AppShell title="History">
-      <PageHeader title="Monitoring History" subtitle={`${history.length} events — read-only view`} breadcrumbs={['User', 'History']} />
-      {history.length === 0 ? <EmptyState title="No history" /> : (
+      <PageHeader title="Monitoring History" subtitle="Device event history" breadcrumbs={['User', 'History']} />
+      {history.length === 0 ? <EmptyState title="No history available yet" message="Device connection and disconnection events will be recorded here." /> : (
         <div className="card" style={{ padding:0, overflow:'hidden' }}>
           <div className="table-container">
             <table className="table">

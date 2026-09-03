@@ -1,20 +1,14 @@
-import { useState, useEffect } from 'react';
-import { dataService } from '../services/dataService';
+import { useState } from 'react';
 
-export const useHistory = (deviceId = null) => {
-  const [history, setHistory] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error,   setError]   = useState(null);
-
-  useEffect(() => {
-    const fn = deviceId
-      ? dataService.getHistoryByDevice(deviceId)
-      : dataService.getHistory();
-    fn
-      .then(setHistory)
-      .catch((e) => setError(e.message))
-      .finally(() => setLoading(false));
-  }, [deviceId]);
+/**
+ * Real History hook.
+ * Returns empty array until real history persistence is implemented.
+ * Mock history removed completely.
+ */
+export const useHistory = () => {
+  const [history] = useState([]);
+  const [loading] = useState(false);
+  const [error] = useState(null);
 
   return { history, loading, error };
 };

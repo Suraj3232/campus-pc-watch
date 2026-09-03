@@ -1,17 +1,14 @@
-import { useState, useEffect } from 'react';
-import { dataService } from '../services/dataService';
+import { useState } from 'react';
 
+/**
+ * Real Labs hook.
+ * Returns empty array until Firestore labs management is implemented.
+ * Mock labs removed completely.
+ */
 export const useLabs = () => {
-  const [labs,    setLabs]    = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error,   setError]   = useState(null);
-
-  useEffect(() => {
-    dataService.getLabs()
-      .then(setLabs)
-      .catch((e) => setError(e.message))
-      .finally(() => setLoading(false));
-  }, []);
+  const [labs] = useState([]);
+  const [loading] = useState(false);
+  const [error] = useState(null);
 
   return { labs, loading, error };
 };

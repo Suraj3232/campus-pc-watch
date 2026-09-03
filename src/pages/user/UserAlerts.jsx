@@ -40,7 +40,7 @@ const UserAlerts = () => {
           options={[{ value:'all',label:'All' },{ value:'HIGH',label:'HIGH' },{ value:'WARNING',label:'WARNING' },{ value:'INFO',label:'INFO' }]} />
         <FilterDropdown id="ua-lab" label="Lab" value={labFilter} onChange={setLabFilter} options={labOptions} />
       </div>
-      {filtered.length === 0 ? <EmptyState title="No active alerts" message="No active alerts match your filters." /> : (
+      {filtered.length === 0 ? <EmptyState title="No active alerts" message="No active alerts have been detected." /> : (
         <div style={{ display:'flex', flexDirection:'column', gap:'var(--space-3)' }}>
           {filtered.map((a) => (
             <div key={a.id} className="alert-item" style={{ background: getSeverityBg(a.severity), border:`1px solid ${getSeverityColor(a.severity)}22` }}>

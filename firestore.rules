@@ -1,0 +1,67 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper: Check if authenticated user has admin role in Firestore
+    function isAdmin() {
+      return request.auth != null &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // ==========================================
+    // USERS COLLECTION
+    // ==========================================
+    match /users/{uid} {
+      // Single user profile read: user can read own, admin can read any
+      allow get: if request.auth != null && (request.auth.uid == uid || isAdmin());
+
+      // Query/list users: admin only
+      allow list: if isAdmin();
+
+      // User registration: user creates their own doc, role must strictly be 'user'
+      allow create: if request.auth != null
+        && request.auth.uid == uid
+        && request.resource.data.role == 'user';
+
+      // Profile update: user can update displayName etc., but CANNOT change role to admin
+      allow update: if request.auth != null && request.auth.uid == uid
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['role'])
+            || request.resource.data.role == resource.data.role);
+
+      // Admins can manage all user records
+      allow write: if isAdmin();
+    }
+
+    // ==========================================
+    // DEVICES COLLECTION
+    // ==========================================
+    match /devices/{deviceId} {
+      // Single device document read: user reads own device (or checks non-existence), admin reads all
+      allow get: if request.auth != null && (
+        resource == null ||
+        resource.data.userId == request.auth.uid ||
+        isAdmin()
+      );
+
+      // Collection query (list): admin can read all, user can ONLY query where userId == request.auth.uid
+      allow list: if request.auth != null && (
+        isAdmin() ||
+        resource.data.userId == request.auth.uid
+      );
+
+      // User creates/registers their own browser device
+      allow create: if request.auth != null
+        && request.resource.data.userId == request.auth.uid;
+
+      // User updates their own device (heartbeat pulses, status), or admin manages device
+      allow update: if request.auth != null && (
+        (resource.data.userId == request.auth.uid && request.resource.data.userId == request.auth.uid) ||
+        isAdmin()
+      );
+
+      // Only admins can delete device records
+      allow delete: if isAdmin();
+    }
+  }
+}

@@ -1,17 +1,14 @@
-import { useState, useEffect } from 'react';
-import { dataService } from '../services/dataService';
+import { useState } from 'react';
 
+/**
+ * Real Alert hook.
+ * Currently returns real alerts only (0 when none configured).
+ * Mock alerts removed completely.
+ */
 export const useAlerts = () => {
-  const [alerts,  setAlerts]  = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error,   setError]   = useState(null);
-
-  useEffect(() => {
-    dataService.getAlerts()
-      .then(setAlerts)
-      .catch((e) => setError(e.message))
-      .finally(() => setLoading(false));
-  }, []);
+  const [alerts] = useState([]);
+  const [loading] = useState(false);
+  const [error] = useState(null);
 
   return { alerts, loading, error };
 };

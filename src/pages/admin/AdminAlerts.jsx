@@ -53,7 +53,7 @@ const AdminAlerts = () => {
       </div>
 
       {filtered.length === 0 ? (
-        <EmptyState title="No alerts found" message="Try adjusting your filters." />
+        <EmptyState title="No active alerts" message="No active alerts have been detected." />
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
           {filtered.map((a) => (

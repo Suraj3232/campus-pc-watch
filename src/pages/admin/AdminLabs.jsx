@@ -5,6 +5,7 @@ import AppShell     from '../../components/layout/AppShell';
 import PageHeader   from '../../components/layout/PageHeader';
 import LoadingState from '../../components/ui/LoadingState';
 import ErrorState   from '../../components/ui/ErrorState';
+import EmptyState   from '../../components/ui/EmptyState';
 import StatusBadge  from '../../components/ui/StatusBadge';
 import { useLabs }  from '../../hooks/useLabs';
 import { getHealthLabel } from '../../utils/statusUtils';
@@ -23,7 +24,10 @@ const AdminLabs = () => {
         breadcrumbs={['Admin', 'Labs']}
       />
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 'var(--space-5)' }}>
+      {labs.length === 0 ? (
+        <EmptyState title="No labs configured yet" message="Labs will appear here once configured by an administrator." />
+      ) : (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 'var(--space-5)' }}>
         {labs.map((lab) => {
           const pct    = Math.round((lab.online / lab.totalPCs) * 100);
           const health = getHealthLabel(pct);
@@ -78,6 +82,7 @@ const AdminLabs = () => {
           );
         })}
       </div>
+      )}
     </AppShell>
   );
 };
