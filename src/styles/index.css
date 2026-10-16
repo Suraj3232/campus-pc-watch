@@ -2,39 +2,82 @@
    CAMPUS PC WATCH — GLOBAL DESIGN TOKENS & RESET
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&family=JetBrains+Mono:wght@400;500&display=swap');
 
-/* ── Design Tokens ─────────────────────────────────────────── */
-:root {
+/* ── Dark Theme (default) ───────────────────────────────── */
+:root, [data-theme="dark"] {
   /* Neutrals */
-  --color-bg:            #0f1117;
-  --color-surface:       #161b27;
-  --color-surface-2:     #1e2536;
-  --color-surface-3:     #252d40;
-  --color-border:        #2a3147;
-  --color-border-light:  #35405a;
+  --color-bg:            #0a0d14;
+  --color-surface:       #111520;
+  --color-surface-2:     #181e2e;
+  --color-surface-3:     #1f2740;
+  --color-border:        #232d45;
+  --color-border-light:  #2e3a57;
 
   /* Text */
-  --color-text-primary:   #e8ecf0;
+  --color-text-primary:   #edf0f7;
   --color-text-secondary: #8a9bb8;
-  --color-text-muted:     #5a6785;
+  --color-text-muted:     #4f607d;
 
   /* Brand Accent */
-  --color-accent:      #3b82f6;
-  --color-accent-dim:  #1d4ed8;
-  --color-accent-glow: rgba(59, 130, 246, 0.12);
-  --color-accent-hover:#60a5fa;
+  --color-accent:        #4f8ef7;
+  --color-accent-dim:    #2563eb;
+  --color-accent-glow:   rgba(79, 142, 247, 0.12);
+  --color-accent-glow-2: rgba(79, 142, 247, 0.06);
+  --color-accent-hover:  #6fa4ff;
 
   /* Status */
   --color-online:      #22c55e;
   --color-online-bg:   rgba(34, 197, 94, 0.10);
-  --color-offline:     #ef4444;
-  --color-offline-bg:  rgba(239, 68, 68, 0.10);
+  --color-offline:     #f43f5e;
+  --color-offline-bg:  rgba(244, 63, 94, 0.10);
   --color-warning:     #f59e0b;
   --color-warning-bg:  rgba(245, 158, 11, 0.10);
   --color-info:        #60a5fa;
   --color-info-bg:     rgba(96, 165, 250, 0.10);
 
+  /* Theme toggle helper */
+  --theme-icon: '☀️';
+}
+
+/* ── Light Theme ────────────────────────────────────────── */
+[data-theme="light"] {
+  --color-bg:            #f4f6fb;
+  --color-surface:       #ffffff;
+  --color-surface-2:     #f0f3fa;
+  --color-surface-3:     #e8edf6;
+  --color-border:        #dde3f0;
+  --color-border-light:  #c8d1e8;
+
+  --color-text-primary:   #111827;
+  --color-text-secondary: #374151;
+  --color-text-muted:     #6b7280;
+
+  --color-accent:        #2563eb;
+  --color-accent-dim:    #1d4ed8;
+  --color-accent-glow:   rgba(37, 99, 235, 0.10);
+  --color-accent-glow-2: rgba(37, 99, 235, 0.05);
+  --color-accent-hover:  #1e40af;
+
+  --color-online:      #16a34a;
+  --color-online-bg:   rgba(22, 163, 74, 0.10);
+  --color-offline:     #dc2626;
+  --color-offline-bg:  rgba(220, 38, 38, 0.10);
+  --color-warning:     #d97706;
+  --color-warning-bg:  rgba(217, 119, 6, 0.10);
+  --color-info:        #2563eb;
+  --color-info-bg:     rgba(37, 99, 235, 0.10);
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --shadow-xl: 0 16px 48px rgba(0,0,0,0.14);
+
+  --theme-icon: '🌙';
+}
+
+/* ── Shared Tokens ──────────────────────────────────────── */
+:root {
   /* Typography */
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
@@ -66,6 +109,7 @@
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-xl: 16px;
+  --radius-2xl:20px;
   --radius-full: 9999px;
 
   /* Shadows */
@@ -80,12 +124,15 @@
   --transition-slow:   350ms ease;
 
   /* Sidebar */
-  --sidebar-width:          240px;
+  --sidebar-width:           240px;
   --sidebar-collapsed-width: 64px;
   --topbar-height:           60px;
+
+  /* Mobile breakpoints */
+  --mobile-sidebar-width: 260px;
 }
 
-/* ── Reset ─────────────────────────────────────────────────── */
+/* ── Reset ─────────────────────────────────────────────── */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -105,13 +152,14 @@ body {
   background-color: var(--color-bg);
   line-height: 1.6;
   min-height: 100vh;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
 }
 
 #root {
   min-height: 100vh;
 }
 
-/* ── Base Elements ─────────────────────────────────────────── */
+/* ── Base Elements ──────────────────────────────────────── */
 h1, h2, h3, h4, h5, h6 {
   line-height: 1.25;
   font-weight: 600;
@@ -164,13 +212,13 @@ ul, ol {
   list-style: none;
 }
 
-/* ── Scrollbar ─────────────────────────────────────────────── */
+/* ── Scrollbar ──────────────────────────────────────────── */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-surface);
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
   background: var(--color-border-light);
@@ -180,19 +228,19 @@ ul, ol {
   background: var(--color-text-muted);
 }
 
-/* ── Focus Ring ─────────────────────────────────────────────── */
+/* ── Focus Ring ─────────────────────────────────────────── */
 :focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
 
-/* ── Selection ─────────────────────────────────────────────── */
+/* ── Selection ──────────────────────────────────────────── */
 ::selection {
   background: var(--color-accent-glow);
   color: var(--color-text-primary);
 }
 
-/* ── Utility Classes ─────────────────────────────────────────── */
+/* ── Utility Classes ─────────────────────────────────────── */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -213,4 +261,25 @@ ul, ol {
 
 .page-fade-in {
   animation: pageFadeIn var(--transition-normal) ease;
+}
+
+/* ── Mobile Overlay ─────────────────────────────────────── */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(2px);
+  z-index: 199;
+  animation: backdropFadeIn 0.2s ease;
+}
+
+/* ── Responsive ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .hide-mobile  { display: none !important; }
+  .sidebar-overlay { display: block; }
+}
+
+@media (min-width: 769px) {
+  .hide-desktop { display: none !important; }
 }

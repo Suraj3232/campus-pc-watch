@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, Monitor, FlaskConical, Bell, Clock, BarChart3,
-  Users, Settings, ChevronLeft, ChevronRight, Network, LogOut,
+  Users, Settings, ChevronLeft, ChevronRight, Network, LogOut, X,
 } from 'lucide-react';
 import { useAuth } from '../../auth/useAuth';
 import { useToast } from '../ui/Toast';
@@ -27,7 +27,7 @@ const userNav = [
   { to: '/user/reports',   icon: <BarChart3        size={18} />, label: 'Reports'   },
 ];
 
-const Sidebar = ({ collapsed, onToggle }) => {
+const Sidebar = ({ collapsed, onToggle, onClose, isMobile }) => {
   const { userRole, logout } = useAuth();
   const toast    = useToast();
   const navigate = useNavigate();
@@ -62,20 +62,35 @@ const Sidebar = ({ collapsed, onToggle }) => {
         borderBottom: '1px solid var(--color-border)',
         height: 'var(--topbar-height)',
         overflow: 'hidden',
+        justifyContent: 'space-between',
       }}>
-        <div style={{
-          width: 32, height: 32, borderRadius: 'var(--radius-md)',
-          background: 'var(--color-accent)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          flexShrink: 0,
-        }}>
-          <Network size={18} color="#fff" />
-        </div>
-        {!collapsed && (
-          <div style={{ animation: 'fadeInFromLeft 0.2s ease' }}>
-            <div style={{ fontWeight: 700, fontSize: 'var(--text-sm)', color: 'var(--color-text-primary)', lineHeight: 1.1 }}>Campus PC</div>
-            <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)', lineHeight: 1 }}>Watch</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', overflow: 'hidden' }}>
+          <div style={{
+            width: 32, height: 32, borderRadius: 'var(--radius-md)',
+            background: 'linear-gradient(135deg, var(--color-accent), #6366f1)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            flexShrink: 0,
+            boxShadow: '0 0 12px var(--color-accent-glow)',
+          }}>
+            <Network size={18} color="#fff" />
           </div>
+          {!collapsed && (
+            <div style={{ animation: 'fadeInFromLeft 0.2s ease', overflow: 'hidden' }}>
+              <div style={{ fontWeight: 800, fontSize: 'var(--text-sm)', color: 'var(--color-text-primary)', lineHeight: 1.1, whiteSpace: 'nowrap' }}>Campus PC</div>
+              <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)', lineHeight: 1 }}>Watch</div>
+            </div>
+          )}
+        </div>
+        {/* Close on mobile */}
+        {isMobile && onClose && (
+          <button
+            onClick={onClose}
+            className="btn btn-ghost btn-icon"
+            aria-label="Close sidebar"
+            style={{ flexShrink: 0 }}
+          >
+            <X size={16} />
+          </button>
         )}
       </div>
 
@@ -138,27 +153,29 @@ const Sidebar = ({ collapsed, onToggle }) => {
         </button>
       </div>
 
-      {/* Collapse toggle */}
-      <button
-        onClick={onToggle}
-        aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-        style={{
-          position: 'absolute',
-          right: -12,
-          top: 'calc(var(--topbar-height) + var(--space-8))',
-          width: 24, height: 24,
-          borderRadius: '50%',
-          background: 'var(--color-surface-2)',
-          border: '1px solid var(--color-border)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          color: 'var(--color-text-secondary)',
-          cursor: 'pointer',
-          zIndex: 10,
-          transition: 'all var(--transition-fast)',
-        }}
-      >
-        {collapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
-      </button>
+      {/* Collapse toggle — desktop only */}
+      {!isMobile && (
+        <button
+          onClick={onToggle}
+          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          style={{
+            position: 'absolute',
+            right: -12,
+            top: 'calc(var(--topbar-height) + var(--space-8))',
+            width: 24, height: 24,
+            borderRadius: '50%',
+            background: 'var(--color-surface-2)',
+            border: '1px solid var(--color-border)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: 'var(--color-text-secondary)',
+            cursor: 'pointer',
+            zIndex: 10,
+            transition: 'all var(--transition-fast)',
+          }}
+        >
+          {collapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
+        </button>
+      )}
     </aside>
   );
 };

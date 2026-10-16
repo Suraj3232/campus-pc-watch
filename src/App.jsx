@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './auth/AuthContext';
+import { AuthProvider }  from './auth/AuthContext';
+import { ThemeProvider } from './auth/ThemeContext';
 import { ToastProvider } from './components/ui/Toast';
 import PublicRoute    from './routes/PublicRoute';
 import ProtectedRoute from './routes/ProtectedRoute';
@@ -44,10 +45,11 @@ const NotFound = () => (
 );
 
 const App = () => (
-  <BrowserRouter>
-    <AuthProvider>
-      <ToastProvider>
-        <Routes>
+  <ThemeProvider>
+    <BrowserRouter>
+      <AuthProvider>
+        <ToastProvider>
+          <Routes>
           {/* Public routes */}
           <Route path="/" element={<PublicRoute><LandingPage /></PublicRoute>} />
           <Route path="/login"           element={<PublicRoute><LoginPage /></PublicRoute>} />
@@ -93,12 +95,13 @@ const App = () => (
             </ProtectedRoute>
           } />
 
-          {/* 404 */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </ToastProvider>
-    </AuthProvider>
-  </BrowserRouter>
+            {/* 404 */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </ToastProvider>
+      </AuthProvider>
+    </BrowserRouter>
+  </ThemeProvider>
 );
 
 export default App;
