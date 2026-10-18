@@ -1,25 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Monitor, Wifi, WifiOff, AlertTriangle, Bell, Activity, ArrowRight } from 'lucide-react';
+import { Monitor, Wifi, WifiOff, AlertTriangle, Bell, Activity, ArrowRight, Plus, RefreshCw, Zap, ShieldCheck } from 'lucide-react';
 import AppShell     from '../../components/layout/AppShell';
 import PageHeader   from '../../components/layout/PageHeader';
 import StatCard     from '../../components/ui/StatCard';
 import StatusBadge  from '../../components/ui/StatusBadge';
 import LoadingState from '../../components/ui/LoadingState';
 import ErrorState   from '../../components/ui/ErrorState';
+import ConnectDeviceModal from '../../components/devices/ConnectDeviceModal';
+import DeviceConnectionBanner from '../../components/devices/DeviceConnectionBanner';
 import { useDevices } from '../../hooks/useDevices';
 import { useLabs }    from '../../hooks/useLabs';
 import { useAlerts }  from '../../hooks/useAlerts';
 import { useHistory } from '../../hooks/useHistory';
+import { useMyDevice } from '../../hooks/useMyDevice';
 import { timeAgo }    from '../../utils/formatters';
 import { getSeverityColor, getSeverityBg } from '../../utils/statusUtils';
 import { getMillis } from '../../services/deviceService';
 
 const AdminDashboard = () => {
-  const { devices, loading: dLoad, error: dErr } = useDevices();
+  const { devices, loading: dLoad, error: dErr, refetch } = useDevices();
   const { labs,    loading: lLoad }               = useLabs();
   const { alerts,  loading: aLoad }               = useAlerts();
   const { history, loading: hLoad }               = useHistory();
+  const { device: myDevice }                      = useMyDevice();
+
+  const [connectModalOpen, setConnectModalOpen] = useState(false);
+  const [deviceFilter, setDeviceFilter] = useState('all'); // 'all' | 'online' | 'offline'
 
   const loading = dLoad || lLoad || aLoad || hLoad;
 
@@ -32,19 +39,80 @@ const AdminDashboard = () => {
   const activeAlerts = alerts.filter((a) => !a.resolved);
   const recentAlerts = activeAlerts.slice(0, 5);
   const recentActivity = history.slice(0, 10);
-  const recentDevices  = [...devices].sort((a, b) => getMillis(b.lastSeen) - getMillis(a.lastSeen)).slice(0, 8);
+  
+  // Health percentage
+  const healthPct = total > 0 ? Math.round((online / total) * 100) : 100;
+
+  // Filtered devices for live view
+  const displayDevices = [...devices]
+    .filter((d) => deviceFilter === 'all' || d.status === deviceFilter)
+    .sort((a, b) => getMillis(b.lastSeen) - getMillis(a.lastSeen))
+    .slice(0, 8);
 
   return (
     <AppShell title="Dashboard">
-      <PageHeader title="Admin Dashboard" subtitle="Real-time campus network overview" breadcrumbs={['Admin', 'Dashboard']} />
+      <PageHeader
+        title="Admin Dashboard"
+        subtitle="Real-time campus network & workstation monitoring"
+        breadcrumbs={['Admin', 'Dashboard']}
+        actions={
+          <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+            <button className="btn btn-secondary btn-sm" onClick={refetch}>
+              <RefreshCw size={13} /> Refresh
+            </button>
+            <button className="btn btn-primary btn-sm" onClick={() => setConnectModalOpen(true)}>
+              <Plus size={14} /> Connect Device
+            </button>
+          </div>
+        }
+      />
 
-      {/* Stat Cards */}
+      {/* Live Device Connection Status Banner */}
+      <DeviceConnectionBanner
+        myDevice={myDevice}
+        onOpenConnect={() => setConnectModalOpen(true)}
+      />
+
+      {/* Summary Metrics ("Sum Stuff") */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--space-4)', marginBottom: 'var(--space-6)' }}>
-        <StatCard icon={<Monitor      size={20} />} value={total}            label="Total Devices"   variant="accent" />
-        <StatCard icon={<Wifi         size={20} />} value={online}           label="Online"           variant="online" />
-        <StatCard icon={<WifiOff      size={20} />} value={offline}          label="Offline"          variant="offline" />
-        <StatCard icon={<AlertTriangle size={20} />} value={activeAlerts.length} label="Active Alerts" variant="warning" />
+        <StatCard
+          icon={<Monitor size={20} />}
+          value={total}
+          label="Total Monitored PCs"
+          variant="accent"
+        />
+        <StatCard
+          icon={<Wifi size={20} />}
+          value={`${online} (${healthPct}%)`}
+          label="Online & Active"
+          variant="online"
+        />
+        <StatCard
+          icon={<WifiOff size={20} />}
+          value={offline}
+          label="Offline Stations"
+          variant="offline"
+        />
+        <StatCard
+          icon={<ShieldCheck size={20} />}
+          value={`${healthPct}%`}
+          label="Network Health Score"
+          variant="accent"
+        />
+        <StatCard
+          icon={<AlertTriangle size={20} />}
+          value={activeAlerts.length}
+          label="Active Alerts"
+          variant="warning"
+        />
       </div>
+
+      {/* Connect Device Modal */}
+      <ConnectDeviceModal
+        isOpen={connectModalOpen}
+        onClose={() => setConnectModalOpen(false)}
+        onDeviceConnected={refetch}
+      />
 
       {/* Main grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) 340px', gap: 'var(--space-5)', alignItems: 'start' }}>

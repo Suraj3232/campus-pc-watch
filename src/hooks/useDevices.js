@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import {
   subscribeToDevices,
   resolveDeviceStatus,
+  addCustomDevice,
 } from '../services/deviceService';
 import { doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
@@ -50,9 +51,8 @@ export const useDevices = () => {
     setTick((t) => t + 1);
   }, []);
 
-  const addDevice = async () => {
-    // Real browser devices auto-register upon login.
-    throw new Error('Devices are automatically registered when users log in from their browser.');
+  const addDevice = async (deviceData, user) => {
+    return await addCustomDevice(deviceData, user);
   };
 
   const updateDevice = async (id, data) => {
