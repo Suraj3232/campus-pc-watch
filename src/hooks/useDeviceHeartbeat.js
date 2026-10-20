@@ -56,5 +56,5 @@ export const useDeviceHeartbeat = (user) => {
         intervalRef.current = null;
       }
     };
-  }, [user?.uid]);
+  }, [user]);
 };

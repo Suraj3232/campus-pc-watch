@@ -30,7 +30,7 @@ export const useMyDevice = () => {
     );
 
     return () => unsubscribe();
-  }, [user?.uid]);
+  }, [user]);
 
   // Local timer every 5 seconds to re-calculate online/offline status locally without Firestore writes
   useEffect(() => {

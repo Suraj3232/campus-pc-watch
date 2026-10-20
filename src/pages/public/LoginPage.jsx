@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Network, Eye, EyeOff, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Eye, EyeOff, ArrowRight } from 'lucide-react';
 import AuthLayout from '../../layouts/AuthLayout';
 import { useAuth } from '../../auth/useAuth';
 import { useToast } from '../../components/ui/Toast';
@@ -10,7 +10,6 @@ import { getAuthErrorMessage } from '../../firebase/auth';
 const LoginPage = () => {
   const { login }  = useAuth();
   const toast      = useToast();
-  const navigate   = useNavigate();
   const [form,     setForm]    = useState({ email: '', password: '' });
   const [errors,   setErrors]  = useState({});
   const [loading,  setLoading] = useState(false);

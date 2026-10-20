@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   BarChart, Bar, LineChart, Line,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend,
-  ResponsiveContainer, PieChart, Pie, Cell,
+  ResponsiveContainer, Cell,
 } from 'recharts';
 import { TrendingUp, CheckCircle, AlertTriangle, Activity, Monitor, Wifi } from 'lucide-react';
 import AppShell     from '../../components/layout/AppShell';
@@ -26,8 +26,6 @@ const tooltipStyle = {
   labelStyle: { color: '#8a9bb8', marginBottom: 4 },
   cursor: { fill: 'rgba(59,130,246,0.07)' },
 };
-
-const COLORS = ['#3b82f6', '#22c55e', '#f59e0b', '#ef4444'];
 
 const AdminReports = () => {
   const { reports, loading, error } = useReports();

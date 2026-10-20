@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Moon, Sun, Bell, Monitor, Shield, Key, RefreshCw } from 'lucide-react';
+import { useState } from 'react';
+import { Moon, Sun, Bell, Monitor, Shield, Key } from 'lucide-react';
 import AppShell   from '../../components/layout/AppShell';
 import PageHeader from '../../components/layout/PageHeader';
 import { useTheme } from '../../auth/ThemeContext';

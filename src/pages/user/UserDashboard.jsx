@@ -1,17 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Monitor, Wifi, WifiOff, AlertTriangle, Activity, ArrowRight, Bell } from 'lucide-react';
+import { Monitor, Wifi, WifiOff, AlertTriangle, Activity, ArrowRight, Bell, Plus } from 'lucide-react';
 import AppShell     from '../../components/layout/AppShell';
 import PageHeader   from '../../components/layout/PageHeader';
 import StatCard     from '../../components/ui/StatCard';
 import StatusBadge  from '../../components/ui/StatusBadge';
 import LoadingState from '../../components/ui/LoadingState';
 import ErrorState   from '../../components/ui/ErrorState';
+import ConnectDeviceModal from '../../components/devices/ConnectDeviceModal';
+import DeviceConnectionBanner from '../../components/devices/DeviceConnectionBanner';
 import { useMyDevice } from '../../hooks/useMyDevice';
 import { timeAgo } from '../../utils/formatters';
 
 const UserDashboard = () => {
-  const { devices, loading, error } = useMyDevice();
+  const { device: myDevice, devices, loading, error } = useMyDevice();
+  const [connectModalOpen, setConnectModalOpen] = useState(false);
 
   if (loading) return <AppShell title="Monitoring View"><LoadingState message="Loading your device…" /></AppShell>;
   if (error)   return <AppShell title="Monitoring View"><ErrorState message={error} /></AppShell>;
@@ -22,7 +25,27 @@ const UserDashboard = () => {
 
   return (
     <AppShell title="Monitoring View">
-      <PageHeader title="Monitoring View" subtitle="Your active device presence status" breadcrumbs={['User', 'Dashboard']} />
+      <PageHeader
+        title="Monitoring View"
+        subtitle="Your active device presence status"
+        breadcrumbs={['User', 'Dashboard']}
+        actions={
+          <button className="btn btn-primary btn-sm" onClick={() => setConnectModalOpen(true)}>
+            <Plus size={14} /> Connect My Device
+          </button>
+        }
+      />
+
+      {/* Live Device Connection Status Banner */}
+      <DeviceConnectionBanner
+        myDevice={myDevice}
+        onOpenConnect={() => setConnectModalOpen(true)}
+      />
+
+      <ConnectDeviceModal
+        isOpen={connectModalOpen}
+        onClose={() => setConnectModalOpen(false)}
+      />
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--space-4)', marginBottom: 'var(--space-6)' }}>
         <StatCard icon={<Monitor       size={20} />} value={total}   label="My Devices"    variant="accent" />
@@ -78,9 +101,23 @@ const UserDashboard = () => {
             <div className="card-header">
               <div className="card-title">Assigned Lab</div>
             </div>
-            <p style={{ color: 'var(--color-text-muted)', fontSize: 'var(--text-sm)' }}>
-              No lab assigned to this device yet.
-            </p>
+            {myDevice?.lab ? (
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 'var(--space-2) 0' }}>
+                <div>
+                  <div style={{ fontWeight: 600, fontSize: 'var(--text-base)', color: 'var(--color-text-primary)' }}>
+                    {myDevice.lab}
+                  </div>
+                  <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)', marginTop: 2 }}>
+                    Station: {myDevice.name} • IP: {myDevice.ip || 'Local Network'}
+                  </div>
+                </div>
+                <span className="badge badge-online">Connected</span>
+              </div>
+            ) : (
+              <p style={{ color: 'var(--color-text-muted)', fontSize: 'var(--text-sm)' }}>
+                No lab assigned to this device yet. Use &quot;Connect My Device&quot; above to select your workstation location.
+              </p>
+            )}
           </div>
         </div>
 

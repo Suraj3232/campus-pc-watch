@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import {
   Monitor,
-  Wifi,
   Copy,
   Check,
   Zap,
   Terminal,
   Cpu,
-  Layers,
-  ArrowRight,
   ShieldCheck,
   Laptop
 } from 'lucide-react';

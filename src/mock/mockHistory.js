@@ -1,5 +1,4 @@
 const now = Date.now();
-const mins = (m) => new Date(now - m * 60 * 1000).toISOString();
 const hrs  = (h) => new Date(now - h * 60 * 60 * 1000).toISOString();
 
 const events = [
