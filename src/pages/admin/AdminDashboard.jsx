@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Monitor, Wifi, WifiOff, AlertTriangle, Bell, Activity, ArrowRight, Plus, RefreshCw, Zap, ShieldCheck } from 'lucide-react';
+import { Monitor, Wifi, WifiOff, AlertTriangle, Bell, Activity, ArrowRight, Plus, RefreshCw, ShieldCheck } from 'lucide-react';
 import AppShell     from '../../components/layout/AppShell';
 import PageHeader   from '../../components/layout/PageHeader';
 import StatCard     from '../../components/ui/StatCard';
@@ -120,13 +120,72 @@ const AdminDashboard = () => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-5)' }}>
           {/* Live Device Table */}
           <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-            <div style={{ padding: 'var(--space-4) var(--space-5)', borderBottom: '1px solid var(--color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{
+              padding: 'var(--space-4) var(--space-5)',
+              borderBottom: '1px solid var(--color-border)',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: 'var(--space-3)',
+            }}>
               <div>
                 <div className="card-title">Live Device Status</div>
-                <div className="card-subtitle">Last 8 active devices</div>
+                <div className="card-subtitle">Real-time status of monitored campus PCs</div>
               </div>
-              <Link to="/admin/devices" className="btn btn-ghost btn-sm">View all <ArrowRight size={13} /></Link>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+                {/* Filter Pills */}
+                <div style={{
+                  display: 'inline-flex',
+                  background: 'var(--color-surface-2)',
+                  padding: 3,
+                  borderRadius: 'var(--radius-md)',
+                  border: '1px solid var(--color-border)',
+                }}>
+                  {[
+                    { id: 'all',     label: 'All',     count: total },
+                    { id: 'online',  label: 'Online',  count: online },
+                    { id: 'offline', label: 'Offline', count: offline },
+                  ].map((filter) => {
+                    const active = deviceFilter === filter.id;
+                    return (
+                      <button
+                        key={filter.id}
+                        type="button"
+                        onClick={() => setDeviceFilter(filter.id)}
+                        style={{
+                          padding: '3px 10px',
+                          fontSize: 'var(--text-xs)',
+                          fontWeight: active ? 600 : 500,
+                          borderRadius: 'calc(var(--radius-md) - 2px)',
+                          background: active ? 'var(--color-accent)' : 'transparent',
+                          color: active ? '#ffffff' : 'var(--color-text-secondary)',
+                          transition: 'all var(--transition-fast)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 5,
+                        }}
+                      >
+                        {filter.label}
+                        <span style={{
+                          opacity: active ? 0.9 : 0.6,
+                          fontSize: 10,
+                          fontFamily: 'var(--font-mono)',
+                        }}>
+                          {filter.count}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <Link to="/admin/devices" className="btn btn-ghost btn-sm">
+                  View all <ArrowRight size={13} />
+                </Link>
+              </div>
             </div>
+
             <div className="table-container">
               <table className="table">
                 <thead>
@@ -139,14 +198,14 @@ const AdminDashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {recentDevices.length === 0 ? (
+                  {displayDevices.length === 0 ? (
                     <tr>
-                      <td colSpan="5" style={{ textAlign: 'center', padding: 'var(--space-6)', color: 'var(--color-text-muted)', fontSize: 'var(--text-sm)' }}>
-                        No devices connected yet.
+                      <td colSpan="5" style={{ textAlign: 'center', padding: 'var(--space-8)', color: 'var(--color-text-muted)', fontSize: 'var(--text-sm)' }}>
+                        No {deviceFilter !== 'all' ? `${deviceFilter} ` : ''}devices found.
                       </td>
                     </tr>
                   ) : (
-                    recentDevices.map((d) => (
+                    displayDevices.map((d) => (
                       <tr key={d.id}>
                         <td>
                           <Link to={`/admin/devices/${d.id}`} style={{ fontFamily: 'var(--font-mono)', fontWeight: 600, color: 'var(--color-accent)' }}>

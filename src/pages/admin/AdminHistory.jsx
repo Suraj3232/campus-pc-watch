@@ -9,7 +9,7 @@ import ErrorState   from '../../components/ui/ErrorState';
 import { useHistory } from '../../hooks/useHistory';
 import { useLabs }    from '../../hooks/useLabs';
 import { useDevices } from '../../hooks/useDevices';
-import { formatDateTime, timeAgo } from '../../utils/formatters';
+import { formatDateTime } from '../../utils/formatters';
 
 const AdminHistory = () => {
   const { history, loading, error } = useHistory();

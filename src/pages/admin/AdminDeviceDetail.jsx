@@ -9,7 +9,7 @@ import ErrorState   from '../../components/ui/ErrorState';
 import { useDevices } from '../../hooks/useDevices';
 import { useHistory } from '../../hooks/useHistory';
 import { useAlerts }  from '../../hooks/useAlerts';
-import { timeAgo, formatDate, formatDateTime } from '../../utils/formatters';
+import { timeAgo, formatDate } from '../../utils/formatters';
 import { getSeverityColor, getSeverityBg } from '../../utils/statusUtils';
 
 /* ── Severity icon helper ─────────────────────────────────────── */

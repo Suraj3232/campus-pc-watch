@@ -481,7 +481,7 @@ const LandingPage = () => {
             <span style={{ color: 'var(--color-accent)' }}>Campus Labs?</span>
           </h2>
           <p style={{ fontSize: 'var(--text-lg)', color: 'var(--color-text-muted)', marginBottom: 'var(--space-8)' }}>
-            Join your institution's IT team on Campus PC Watch today.
+            Join your institution&apos;s IT team on Campus PC Watch today.
           </p>
           <div style={{ display: 'flex', gap: 'var(--space-4)', justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link to="/register" className="btn btn-primary btn-lg" style={{

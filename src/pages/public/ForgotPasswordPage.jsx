@@ -50,7 +50,7 @@ const ForgotPasswordPage = () => {
           <div style={{ marginBottom: 'var(--space-8)' }}>
             <h1 style={{ fontSize: 'var(--text-3xl)', fontWeight: 800, marginBottom: 'var(--space-2)' }}>Reset Password</h1>
             <p style={{ color: 'var(--color-text-muted)', fontSize: 'var(--text-sm)' }}>
-              Enter your email and we'll send a reset link.
+              Enter your email and we&apos;ll send a reset link.
             </p>
           </div>
 

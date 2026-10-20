@@ -39,7 +39,7 @@ const NotFound = () => (
   <div style={{ display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', minHeight:'100vh', gap:'var(--space-4)', textAlign:'center', padding:'var(--space-8)' }}>
     <div style={{ fontSize:64, fontWeight:800, color:'var(--color-accent)', fontFamily:'var(--font-mono)' }}>404</div>
     <h1 style={{ fontSize:'var(--text-2xl)' }}>Page Not Found</h1>
-    <p style={{ color:'var(--color-text-muted)' }}>The page you're looking for doesn't exist.</p>
+    <p style={{ color:'var(--color-text-muted)' }}>The page you&apos;re looking for doesn&apos;t exist.</p>
     <a href="/" className="btn btn-primary">Go Home</a>
   </div>
 );

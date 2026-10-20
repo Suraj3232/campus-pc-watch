@@ -105,7 +105,7 @@ const LoginPage = () => {
       </form>
 
       <p style={{ textAlign: 'center', marginTop: 'var(--space-6)', fontSize: 'var(--text-sm)', color: 'var(--color-text-muted)' }}>
-        Don't have an account?{' '}
+        Don&apos;t have an account?{' '}
         <Link to="/register">Create one</Link>
       </p>
     </AuthLayout>

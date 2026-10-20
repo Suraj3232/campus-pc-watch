@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
 import {
   Laptop,
-  Wifi,
   Zap,
-  Settings,
-  CheckCircle2,
   Clock,
-  Activity,
   Plus
 } from 'lucide-react';
 import { getDeviceId, getDeviceName, sendDevicePing } from '../../services/deviceService';

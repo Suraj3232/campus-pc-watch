@@ -1,12 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Monitor, ArrowRight } from 'lucide-react';
+import { MapPin, ArrowRight } from 'lucide-react';
 import AppShell     from '../../components/layout/AppShell';
 import PageHeader   from '../../components/layout/PageHeader';
 import LoadingState from '../../components/ui/LoadingState';
 import ErrorState   from '../../components/ui/ErrorState';
 import EmptyState   from '../../components/ui/EmptyState';
-import StatusBadge  from '../../components/ui/StatusBadge';
 import { useLabs }  from '../../hooks/useLabs';
 import { getHealthLabel } from '../../utils/statusUtils';
 
