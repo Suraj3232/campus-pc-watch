@@ -66,9 +66,11 @@ const ConnectDeviceModal = ({ isOpen, onClose, onDeviceConnected }) => {
   const handleConnectThisPc = async () => {
     setConnecting(true);
     try {
+      const matchedLab = labs.find((l) => l.name === thisPcLab);
       const result = await addCustomDevice({
         deviceId,
         deviceName: thisPcName.trim() || getDeviceName(deviceId),
+        labId: matchedLab ? matchedLab.id : null,
         labName: thisPcLab,
         ipAddress: thisPcIp,
         description: `${systemInfo.os} • ${systemInfo.browser}`,
@@ -99,8 +101,10 @@ const ConnectDeviceModal = ({ isOpen, onClose, onDeviceConnected }) => {
     }
     setConnecting(true);
     try {
+      const matchedLab = labs.find((l) => l.name === manualForm.lab);
       const newDev = await addCustomDevice({
         deviceName: manualForm.name.trim(),
+        labId: matchedLab ? matchedLab.id : null,
         labName: manualForm.lab,
         ipAddress: manualForm.ip.trim() || `192.168.1.${Math.floor(Math.random() * 200 + 10)}`,
         description: manualForm.description || 'Lab Workstation',

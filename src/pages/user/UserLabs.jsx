@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { MapPin } from 'lucide-react';
 import AppShell     from '../../components/layout/AppShell';
 import PageHeader   from '../../components/layout/PageHeader';
@@ -40,11 +41,18 @@ const UserLabs = () => {
                   </div>
                 ))}
               </div>
-              <div>
+              <div style={{ marginBottom: 'var(--space-4)' }}>
                 <div style={{ display:'flex', justifyContent:'space-between', fontSize:'var(--text-xs)', color:'var(--color-text-muted)', marginBottom:4 }}>
                   <span>Availability</span><span style={{ color: health.color, fontWeight:600 }}>{pct}%</span>
                 </div>
                 <div className="progress-bar"><div className="progress-bar-fill" style={{ width:`${pct}%`, background: health.color }} /></div>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span className="badge badge-info" style={{ fontSize: 10 }}>{lab.category}</span>
+                <Link to={`/user/devices?lab=${lab.id}`} className="btn btn-ghost btn-sm">
+                  View Devices
+                </Link>
               </div>
             </div>
           );

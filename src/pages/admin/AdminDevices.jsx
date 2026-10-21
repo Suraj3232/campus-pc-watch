@@ -1,6 +1,6 @@
-import React, { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import { Monitor, Wifi, WifiOff, RefreshCw, ChevronUp, ChevronDown } from 'lucide-react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { Monitor, Wifi, WifiOff, RefreshCw, ChevronUp, ChevronDown, RotateCcw } from 'lucide-react';
 import AppShell     from '../../components/layout/AppShell';
 import PageHeader   from '../../components/layout/PageHeader';
 import StatCard     from '../../components/ui/StatCard';
@@ -25,13 +25,24 @@ const AdminDevices = () => {
   const { devices, loading, error, refetch, updateDevice, deleteDevice } = useDevices();
   const { labs } = useLabs();
   const toast    = useToast();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const urlLab = searchParams.get('lab') || 'all';
 
   const [search,   setSearch]   = useState('');
   const [status,   setStatus]   = useState('all');
-  const [labFilter,setLabFilter]= useState('all');
+  const [labFilter,setLabFilter]= useState(urlLab);
   const [sortKey,  setSortKey]  = useState('name');
   const [sortDir,  setSortDir]  = useState('asc');
   const [page,     setPage]     = useState(1);
+
+  // Sync state if URL query changes
+  useEffect(() => {
+    if (searchParams.get('lab')) {
+      setLabFilter(searchParams.get('lab'));
+      setPage(1);
+    }
+  }, [searchParams]);
 
   const [modalOpen,   setModalOpen]   = useState(false);
   const [editDevice,  setEditDevice]  = useState(null);
@@ -48,11 +59,21 @@ const AdminDevices = () => {
       d = d.filter((x) =>
         (x.name || '').toLowerCase().includes(q) ||
         (x.userEmail || '').toLowerCase().includes(q) ||
-        (x.ip || '').toLowerCase().includes(q)
+        (x.ip || '').toLowerCase().includes(q) ||
+        (x.lab || '').toLowerCase().includes(q) ||
+        (x.labName || '').toLowerCase().includes(q)
       );
     }
     if (status !== 'all')    d = d.filter((x) => x.status === status);
-    if (labFilter !== 'all') d = d.filter((x) => String(x.labId) === labFilter);
+    if (labFilter !== 'all') {
+      const selectedLab = labs.find((l) => String(l.id) === String(labFilter));
+      d = d.filter((x) =>
+        String(x.labId) === String(labFilter) ||
+        (selectedLab && (x.lab === selectedLab.name || x.labName === selectedLab.name)) ||
+        x.lab === labFilter ||
+        x.labName === labFilter
+      );
+    }
 
     d.sort((a,b) => {
       let av = a[sortKey] ?? '';
@@ -65,7 +86,7 @@ const AdminDevices = () => {
       return sortDir === 'asc' ? String(av).localeCompare(String(bv)) : String(bv).localeCompare(String(av));
     });
     return d;
-  }, [devices, search, status, labFilter, sortKey, sortDir]);
+  }, [devices, search, status, labFilter, labs, sortKey, sortDir]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const paginated  = filtered.slice((page-1)*PAGE_SIZE, page*PAGE_SIZE);
@@ -161,6 +182,23 @@ const AdminDevices = () => {
           options={[{ value:'all',label:'All Statuses' },{ value:'online',label:'Online' },{ value:'offline',label:'Offline' }]} />
         {labs.length > 0 && (
           <FilterDropdown id="lab-filter" label="Lab" value={labFilter} onChange={(v) => { setLabFilter(v); setPage(1); }} options={labOptions} />
+        )}
+        {(search || status !== 'all' || labFilter !== 'all') && (
+          <button
+            type="button"
+            className="btn btn-ghost btn-sm"
+            onClick={() => {
+              setSearch('');
+              setStatus('all');
+              setLabFilter('all');
+              setSearchParams({});
+              setPage(1);
+            }}
+            style={{ display: 'flex', alignItems: 'center', gap: 4, height: 38 }}
+            title="Reset filters"
+          >
+            <RotateCcw size={13} /> Reset
+          </button>
         )}
       </div>
 
