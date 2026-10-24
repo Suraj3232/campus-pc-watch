@@ -32,7 +32,7 @@ const AdminHistory = () => {
   const deviceOptions = [{ value: 'all', label: 'All Devices' }, ...devices.map((d) => ({ value: d.id, label: d.name }))];
   const labOptions    = [{ value: 'all', label: 'All Labs'    }, ...labs.map((l)    => ({ value: String(l.id), label: l.name }))];
 
-  if (loading) return <AppShell title="History"><LoadingState message="Loading history…" /></AppShell>;
+  if (loading) return <AppShell title="History"><LoadingState variant="table" /></AppShell>;
   if (error)   return <AppShell title="History"><ErrorState message={error} /></AppShell>;
 
   const statusDot = (s) => ({

@@ -154,7 +154,7 @@ const AdminDevices = () => {
 
   const labOptions = [{ value: 'all', label: 'All Labs' }, ...labs.map((l) => ({ value: String(l.id), label: l.name }))];
 
-  if (loading) return <AppShell title="Devices"><LoadingState message="Loading devices…" /></AppShell>;
+  if (loading) return <AppShell title="Devices"><LoadingState variant="table" /></AppShell>;
   if (error)   return <AppShell title="Devices"><ErrorState message={error} onRetry={refetch} /></AppShell>;
 
   return (

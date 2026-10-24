@@ -45,7 +45,7 @@ const AdminUsers = () => {
     );
   }, [users, search]);
 
-  if (loading) return <AppShell title="Users"><LoadingState message="Loading users…" /></AppShell>;
+  if (loading) return <AppShell title="Users"><LoadingState variant="table" /></AppShell>;
   if (error)   return <AppShell title="Users"><ErrorState message={error} /></AppShell>;
 
   return (

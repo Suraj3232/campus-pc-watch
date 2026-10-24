@@ -30,7 +30,7 @@ const AdminDashboard = () => {
 
   const loading = dLoad || lLoad || aLoad || hLoad;
 
-  if (loading) return <AppShell title="Dashboard"><LoadingState message="Loading dashboard…" /></AppShell>;
+  if (loading) return <AppShell title="Dashboard"><LoadingState variant="dashboard" /></AppShell>;
   if (dErr)    return <AppShell title="Dashboard"><ErrorState message={dErr} /></AppShell>;
 
   const total        = devices.length;

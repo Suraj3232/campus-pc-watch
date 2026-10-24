@@ -12,7 +12,7 @@ import { getHealthLabel } from '../../utils/statusUtils';
 const AdminLabs = () => {
   const { labs, loading, error } = useLabs();
 
-  if (loading) return <AppShell title="Labs"><LoadingState message="Loading labs…" /></AppShell>;
+  if (loading) return <AppShell title="Labs"><LoadingState variant="table" /></AppShell>;
   if (error)   return <AppShell title="Labs"><ErrorState message={error} /></AppShell>;
 
   return (

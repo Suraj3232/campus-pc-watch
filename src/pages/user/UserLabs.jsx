@@ -11,7 +11,7 @@ import { getHealthLabel } from '../../utils/statusUtils';
 
 const UserLabs = () => {
   const { labs, loading, error } = useLabs();
-  if (loading) return <AppShell title="Labs"><LoadingState message="Loading…" /></AppShell>;
+  if (loading) return <AppShell title="Labs"><LoadingState variant="table" /></AppShell>;
   if (error)   return <AppShell title="Labs"><ErrorState message={error} /></AppShell>;
 
   return (

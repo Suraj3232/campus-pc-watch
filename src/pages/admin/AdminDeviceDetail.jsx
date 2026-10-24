@@ -50,7 +50,7 @@ const AdminDeviceDetail = () => {
   const device = devices.find((d) => d.id === id);
   const loading = dLoad || hLoad || aLoad;
 
-  if (loading) return <AppShell title="Device Detail"><LoadingState message="Loading device…" /></AppShell>;
+  if (loading) return <AppShell title="Device Detail"><LoadingState variant="card" /></AppShell>;
   if (dErr)    return <AppShell title="Device Detail"><ErrorState message={dErr} /></AppShell>;
   if (!device) return (
     <AppShell title="Device Detail">

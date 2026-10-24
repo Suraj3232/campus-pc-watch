@@ -16,7 +16,7 @@ const UserDashboard = () => {
   const { device: myDevice, devices, loading, error } = useMyDevice();
   const [connectModalOpen, setConnectModalOpen] = useState(false);
 
-  if (loading) return <AppShell title="Monitoring View"><LoadingState message="Loading your device…" /></AppShell>;
+  if (loading) return <AppShell title="Monitoring View"><LoadingState variant="dashboard" /></AppShell>;
   if (error)   return <AppShell title="Monitoring View"><ErrorState message={error} /></AppShell>;
 
   const total   = devices.length;

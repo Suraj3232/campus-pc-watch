@@ -32,7 +32,7 @@ const AdminReports = () => {
   const { labs }                    = useLabs();
   const [activeChart, setActiveChart] = useState('bar'); // 'bar' | 'line'
 
-  if (loading) return <AppShell title="Reports"><LoadingState message="Loading reports…" /></AppShell>;
+  if (loading) return <AppShell title="Reports"><LoadingState variant="card" /></AppShell>;
   if (error)   return <AppShell title="Reports"><ErrorState message={error} /></AppShell>;
   if (!reports) return null;
 

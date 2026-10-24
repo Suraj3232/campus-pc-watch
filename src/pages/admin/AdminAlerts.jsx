@@ -30,7 +30,7 @@ const AdminAlerts = () => {
 
   const labOptions = [{ value: 'all', label: 'All Labs' }, ...labs.map((l) => ({ value: String(l.id), label: l.name }))];
 
-  if (loading) return <AppShell title="Alerts"><LoadingState message="Loading alerts…" /></AppShell>;
+  if (loading) return <AppShell title="Alerts"><LoadingState variant="table" /></AppShell>;
   if (error)   return <AppShell title="Alerts"><ErrorState message={error} /></AppShell>;
 
   return (
