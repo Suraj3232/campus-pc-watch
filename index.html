@@ -2,16 +2,85 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Campus PC Watch — Real-time network monitoring system for college computer labs. Track device status, manage alerts, and monitor lab health from one dashboard." />
     <title>Campus PC Watch — Smart Campus Network Monitor</title>
+
+    <!-- Favicon & Touch Icons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+
+    <!-- SEO & Metadata -->
+    <meta name="description" content="Campus PC Watch — Real-time network monitoring system for college computer labs. Track device status, manage alerts, and monitor lab health from one dashboard." />
+    <meta name="keywords" content="campus pc watch, network monitoring, computer lab management, device telemetry, lab health, real-time alert system" />
+    <meta name="author" content="Campus PC Watch Team" />
+    <meta name="application-name" content="Campus PC Watch" />
+    <meta name="theme-color" content="#0a0d14" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="color-scheme" content="dark light" />
+
+    <!-- iOS Web App Configuration -->
+    <meta name="apple-mobile-web-app-title" content="Campus PC Watch" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Campus PC Watch — Smart Campus Network Monitor" />
+    <meta property="og:description" content="Real-time network monitoring system for college computer labs. Track device status, manage alerts, and monitor lab health from one dashboard." />
+    <meta property="og:image" content="/favicon.svg" />
+    <meta property="og:site_name" content="Campus PC Watch" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Campus PC Watch — Smart Campus Network Monitor" />
+    <meta name="twitter:description" content="Real-time network monitoring system for college computer labs. Track device status, manage alerts, and monitor lab health from one dashboard." />
+    <meta name="twitter:image" content="/favicon.svg" />
+
+    <!-- Typography (Google Fonts) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   </head>
   <body>
-    <div id="root"></div>
+    <!-- Fallback for users with JavaScript disabled -->
+    <noscript>
+      <div style="font-family: system-ui, -apple-system, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 24px; text-align: center; background-color: #0a0d14; color: #edf0f7;">
+        <h1 style="font-size: 1.5rem; margin-bottom: 8px;">JavaScript is Required</h1>
+        <p style="color: #8a9bb8; max-width: 440px; line-height: 1.5;">Campus PC Watch requires JavaScript to display real-time lab metrics and system status. Please enable JavaScript in your browser settings to continue.</p>
+      </div>
+    </noscript>
+
+    <!-- React Root with Pre-mount Loading Placeholder -->
+    <div id="root">
+      <div id="pre-mount-spinner" style="position: fixed; inset: 0; background-color: #0a0d14; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; font-family: 'Inter', system-ui, -apple-system, sans-serif; color: #edf0f7;">
+        <style>
+          @keyframes pulse-radar {
+            0% { transform: scale(0.95); opacity: 0.9; }
+            50% { transform: scale(1.1); opacity: 0.35; }
+            100% { transform: scale(0.95); opacity: 0.9; }
+          }
+          @keyframes spin-loader {
+            to { transform: rotate(360deg); }
+          }
+        </style>
+        <div style="position: relative; width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+          <div style="position: absolute; inset: 0; border-radius: 50%; border: 2px solid rgba(79, 142, 247, 0.3); animation: pulse-radar 2s ease-in-out infinite;"></div>
+          <div style="position: absolute; inset: -4px; border-radius: 50%; border: 2px solid transparent; border-top-color: #4f8ef7; border-right-color: #4f8ef7; animation: spin-loader 1s linear infinite;"></div>
+          <svg width="28" height="28" viewBox="0 0 48 48" fill="none">
+            <circle cx="24" cy="24" r="8" stroke="#4f8ef7" stroke-width="2.5"/>
+            <circle cx="24" cy="24" r="2.5" fill="#4f8ef7"/>
+            <line x1="24" y1="10" x2="24" y2="16" stroke="#4f8ef7" stroke-width="2" stroke-linecap="round"/>
+            <line x1="24" y1="32" x2="24" y2="38" stroke="#4f8ef7" stroke-width="2" stroke-linecap="round"/>
+            <line x1="10" y1="24" x2="16" y2="24" stroke="#4f8ef7" stroke-width="2" stroke-linecap="round"/>
+            <line x1="32" y1="24" x2="38" y2="24" stroke="#4f8ef7" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div style="font-weight: 600; font-size: 15px; letter-spacing: -0.01em; color: #edf0f7; margin-bottom: 4px;">Campus PC Watch</div>
+        <div style="font-size: 12px; color: #8a9bb8;">Loading system monitor...</div>
+      </div>
+    </div>
+
+    <!-- Application Entry Point -->
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
