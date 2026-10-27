@@ -56,13 +56,13 @@ const AuthLayout = ({ children }) => {
         <div style={{
           position: 'absolute', top: '25%', left: '50%', transform: 'translate(-50%,-50%)',
           width: 400, height: 400, borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(79,142,247,0.12) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(16,185,129,0.14) 0%, transparent 70%)',
           pointerEvents: 'none', animation: 'glowPulse 5s ease-in-out infinite',
         }} />
         <div style={{
           position: 'absolute', bottom: '10%', right: '-10%',
           width: 250, height: 250, borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(168,85,247,0.08) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(20,184,166,0.10) 0%, transparent 70%)',
           pointerEvents: 'none',
         }} />
 
@@ -71,9 +71,9 @@ const AuthLayout = ({ children }) => {
           <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', marginBottom: 'var(--space-10)' }}>
             <div style={{
               width: 44, height: 44, borderRadius: 'var(--radius-lg)',
-              background: 'linear-gradient(135deg, var(--color-accent), #6366f1)',
+              background: 'linear-gradient(135deg, #10b981, #0d9488)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              boxShadow: '0 0 20px var(--color-accent-glow)',
+              boxShadow: '0 0 20px rgba(16,185,129,0.30)',
             }}>
               <Network size={24} color="#fff" />
             </div>
@@ -87,7 +87,7 @@ const AuthLayout = ({ children }) => {
 
           <h2 style={{ fontSize: 'var(--text-2xl)', fontWeight: 800, marginBottom: 'var(--space-3)', letterSpacing: '-0.02em', lineHeight: 1.15 }}>
             Smart Campus<br />
-            <span style={{ color: 'var(--color-accent)' }}>Network Monitoring</span>
+            <span style={{ background: 'linear-gradient(90deg, #10b981, #0d9488)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Network Monitoring</span>
           </h2>
           <p style={{ color: 'var(--color-text-muted)', fontSize: 'var(--text-sm)', lineHeight: 1.7, marginBottom: 'var(--space-8)' }}>
             Real-time visibility into every device across all computer labs — from one unified dashboard.
@@ -139,7 +139,7 @@ const AuthLayout = ({ children }) => {
           <div className="hide-desktop" style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', marginBottom: 'var(--space-8)' }}>
             <div style={{
               width: 36, height: 36, borderRadius: 'var(--radius-md)',
-              background: 'linear-gradient(135deg, var(--color-accent), #6366f1)',
+              background: 'linear-gradient(135deg, #10b981, #0d9488)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
               <Network size={20} color="#fff" />
